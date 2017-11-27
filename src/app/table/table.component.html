@@ -1,3 +1,53 @@
-<p>
-  table works!
-</p>
+<div [ngClass]="{'smallset':(current_page==1 && data && data.total<=10 && (settings && !settings.search))}">
+  <div class="progress" [ngClass]="{'hidden': !loading}">
+      <div class="indeterminate"></div>
+  </div>
+  <nav>
+      <div class="nav-wrapper table-query-header">
+          <div class="input-field">
+              <input #search id="inputSearch" type="search" [(ngModel)]="filter_text" placeholder="Buscar..." (keyup.enter)="onSearch(filter_text)">
+              <label class="label-icon" for="inputSearch"><i class="material-icons">search</i></label>
+              <i class="material-icons" (click)="onClearSearch()">close</i>
+          </div>
+      </div>
+  </nav>
+  <table class="highlight table-links" [ngClass]="{'has-search' : last_page!=1}">
+      <thead>
+          <tr>
+              <th *ngFor="let h of columns" [ngClass]="getColumnHeaderClasses(h)" (click)="onReorder(h)">{{h.header}}</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let d of items | slice:0:20; let i=index" role="button" (click)="toggleSelection(d)" [ngClass]="{'active' : d==selectedItem}">
+              <td *ngFor="let h of columns">{{h.render(d[h.name], d)}}</td>
+          </tr>
+      </tbody>
+  </table>
+  <div class="pages">
+      <ul class="pagination" [ngClass]="{'no-pages':(current_page==1 && last_page==1)}">
+          <li *ngIf="!(current_page==1&&data&&data.total<=10)">
+              <!-- Dropdown Trigger -->
+              <a class="dropdown-button" role="button" data-activates="dropdownSizes" materialize="dropdown">
+                  {{settings.size}}
+                  <span class="fa fa-bars"></span>
+              </a>
+              <!-- Dropdown Structure -->
+              <ul id="dropdownSizes" class="dropdown-content">
+                  <li><a role="button" (click)="setSize(10)">Mostrar 10 elementos</a></li>
+                  <li><a role="button" (click)="setSize(25)">Mostrar 25 elementos</a></li>
+                  <li><a role="button" (click)="setSize(50)">Mostrar 50 elementos</a></li>
+                  <li><a role="button" (click)="setSize(100)">Mostrar 100 elementos</a></li>
+              </ul>
+          </li>
+          <li class="page-button" [ngClass]="{'disabled': current_page == 1, 'waves-effect':current_page != 1}">
+              <a role="button" (click)="current_page==1 || setPage(current_page-1)"><i class="material-icons">chevron_left</i></a>
+          </li>
+          <li *ngFor="let p of page_buttons" class="page-button page-number waves-effect" [ngClass]="{'active':p==current_page}">
+              <a role="button" (click)="p ? setPage(p) : onGoTo()">{{p||'...'}}</a>
+          </li>
+          <li class="page-button" [ngClass]="{'disabled': current_page == last_page, 'waves-effect':current_page != last_page }">
+              <a role="button" (click)="current_page==last_page || setPage(current_page+1)"><i class="material-icons">chevron_right</i></a>
+          </li>
+      </ul>
+  </div>
+</div>

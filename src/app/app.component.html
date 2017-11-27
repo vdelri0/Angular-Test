@@ -1,20 +1,49 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!
-  </h1>
-  <img width="300" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAyNTAgMjUwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNTAgMjUwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojREQwMDMxO30NCgkuc3Qxe2ZpbGw6I0MzMDAyRjt9DQoJLnN0MntmaWxsOiNGRkZGRkY7fQ0KPC9zdHlsZT4NCjxnPg0KCTxwb2x5Z29uIGNsYXNzPSJzdDAiIHBvaW50cz0iMTI1LDMwIDEyNSwzMCAxMjUsMzAgMzEuOSw2My4yIDQ2LjEsMTg2LjMgMTI1LDIzMCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAJIi8+DQoJPHBvbHlnb24gY2xhc3M9InN0MSIgcG9pbnRzPSIxMjUsMzAgMTI1LDUyLjIgMTI1LDUyLjEgMTI1LDE1My40IDEyNSwxNTMuNCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAxMjUsMzAgCSIvPg0KCTxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMjUsNTIuMUw2Ni44LDE4Mi42aDBoMjEuN2gwbDExLjctMjkuMmg0OS40bDExLjcsMjkuMmgwaDIxLjdoMEwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMQ0KCQlMMTI1LDUyLjF6IE0xNDIsMTM1LjRIMTA4bDE3LTQwLjlMMTQyLDEzNS40eiIvPg0KPC9nPg0KPC9zdmc+DQo=">
+<div class="row" style="margin-top: 100px;">
+  <div class="col s12">
+      <h1>Prueba CondorLabs</h1>
+      <div class="input-field col s3">
+        <input placeholder="Enter the start date" id="start_date" type="text" class="validate">
+        <label for="start_date">Start Date</label>
+      </div>
+      <div class="input-field col s3">
+        <input placeholder="Enter the end date" id="End_date" type="text" class="validate">
+        <label for="End_date">End Date</label>
+      </div>
+    </div>
+  </div>
+<div class="row">
+  <div class="col s12">
+    <div class="row">
+      <div class="card">
+        <app-table (onExecuteRequest)="getLogs($event)" [data]="logs" [(selectedItem)]="selectedItem">
+          <app-column header="State Code" name="cd_cebroker_state" orderable="true"></app-column>
+          <app-column header="Pro Code" name="pro_cde" orderable="true"></app-column>
+          <app-column header="Profession" name="cd_profession" orderable="true"></app-column>
+          <app-column header="License ID" name="id_license" orderable="true"></app-column>
+          <app-column header="Cycle End Date" name="dt_end" orderable="true" [render]="renderDate"></app-column>
+          <app-column header="Compliance Status" name="ds_compl_status_returned" orderable="true"></app-column>
+          <app-column header="Client ID" name="id_client_nbr" orderable="true"></app-column>
+          <app-column header="Start Log Date" name="dt_Start_Log" orderable="true" [render]="renderDate"></app-column>
+          <app-column header="End Log Date" name="dt_end_log" orderable="true" [render]="renderDate"></app-column>
+          <app-column header="Environment" name="cd_environment" orderable="true"></app-column>
+          <app-column header="Machine" name="cd_machine" orderable="true"></app-column>
+        </app-table>
+      </div>
+      <div class="col s6">
+        <div style="display: block">
+          <canvas *ngIf="show" baseChart [datasets]="barchartArrayStatus" [labels]="barChartLabelsStatus" [options]="barChartOptions"
+            [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+        </div>
+        <button (click)="randomizeStatus()">Update</button>
+      </div>
+      <div class="col s6">
+        <div style="display: block">
+          <canvas *ngIf="show" baseChart [datasets]="barChartArrayMachine" [labels]="barChartLabelsMachine" [options]="barChartOptions"
+            [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+        </div>
+        <button (click)="randomizeMachine()">Update</button>
+      </div>
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="http://angularjs.blogspot.com/">Angular blog</a></h2>
-  </li>
-</ul>
-
